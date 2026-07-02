@@ -46,6 +46,35 @@ When a demo converts via Stripe checkout, the webhook promotes the demo config t
 <script src="https://YOUR-DOMAIN/embed.js" data-client="EMBED_KEY" async></script>
 ```
 
+## Growth engine (in-house lead gen + outreach)
+
+An automated pipeline that replaces most of a paid prospecting stack (enrichment SaaS, sequencer, orchestrator, CRM) with Claude agents on infrastructure this repo already uses. Fixed cost ≈ $0; variable cost is Claude usage (~$0.03–0.06/lead) + optional Resend.
+
+```
+discover (Places API / Outscraper CSV)
+   → dedup ingest (place_id → phone → name+city)
+   → enrich agent (Claude: facts, owner name, best email, gaps, competitor check)
+   → score (deterministic 0-100, threshold 40 gates Claude spend)
+   → demo generation (their personalized /demo/{slug})
+   → pitch agent (Claude writes the full 5-touch / 14-day sequence, every touch links their demo)
+   → outreach cron (send window, daily cap, suppression list, one-click unsubscribe)
+```
+
+**Setup:** run `supabase/schema-growth.sql` after the base schema, then:
+
+```bash
+npm run discover -- --city "Austin TX" --niche dentist --max 20   # or: npm run import-leads -- export.csv
+npm run pipeline                                                  # enrich → score → demo → sequence
+```
+
+Sending is **dry-run by default** — sequences queue but nothing is emailed until `RESEND_API_KEY` + `OUTREACH_FROM_EMAIL` are set. In production, the `growth` cron discovers + processes daily and the `outreach` cron drains due touches hourly (9am–4pm window, `OUTREACH_DAILY_CAP`).
+
+**Deliverability & compliance notes (read before turning sending on):**
+- Use a separate, warmed sending domain (e.g. `get-frontdesk.com`), never your primary. Keep `OUTREACH_DAILY_CAP` low (20–30) for the first weeks.
+- Every email carries a real postal address (`OUTREACH_PHYSICAL_ADDRESS`) and a working unsubscribe link that permanently suppresses the address — both CAN-SPAM requirements.
+- Competitor detection (Ruby, Smith.ai, Dialpad, Weave, Podium, …) disqualifies leads automatically; leads that unsubscribe or convert stop mid-sequence.
+- At real volume (thousands/month), a dedicated sending tool with warmup networks earns its fee — the sequences generated here export cleanly since they're just rows in `sequences`.
+
 ## Guardrails (baked into every bot)
 
 - Never gives medical / legal / financial advice — clinical questions are deflected to the office phone.
@@ -62,8 +91,13 @@ Both are overridable via `CHAT_MODEL` / `CONFIG_MODEL` env vars.
 ## Repo map
 
 ```
-supabase/schema.sql           all tables: leads, demos, clients, conversations, captured_leads, outreach_log
+supabase/schema.sql           base tables: leads, demos, clients, conversations, captured_leads, outreach_log
+supabase/schema-growth.sql    growth engine: sequences, suppression_list, dedup indexes, lead scoring columns
 scripts/generate-demo.ts      CLI: business URL → live demo page
+scripts/discover.ts           CLI: Google Places discovery → deduped leads
+scripts/import-leads.ts       CLI: Outscraper CSV import → deduped leads
+scripts/pipeline.ts           CLI: sourced leads → enrich → score → demo → sequence
+src/lib/growth/               discovery, normalization/dedup, scoring, pitch agent, mailer, sequencer
 src/lib/scrape.ts             homepage + contact page scraper, chat-widget gap detection
 src/lib/enrich.ts             Claude lead enrichment (gaps + outreach hook)
 src/lib/generate-config.ts    Claude bot-config generation (structured outputs)

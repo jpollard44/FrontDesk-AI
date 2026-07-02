@@ -8,7 +8,10 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "generate-demo": "tsx scripts/generate-demo.ts"
+    "generate-demo": "tsx scripts/generate-demo.ts",
+    "discover": "tsx scripts/discover.ts",
+    "import-leads": "tsx scripts/import-leads.ts",
+    "pipeline": "tsx scripts/pipeline.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.94.0",
