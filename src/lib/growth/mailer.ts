@@ -11,6 +11,10 @@ export interface OutboundEmail {
   to: string;
   subject: string;
   text: string;
+  /** Override sender. Default is OUTREACH_FROM_EMAIL (cold-outreach domain);
+   *  transactional client email should pass NOTIFY_FROM_EMAIL instead. */
+  from?: string;
+  replyTo?: string;
 }
 
 export interface SendResult {
@@ -25,11 +29,13 @@ export function mailerConfigured(): boolean {
 }
 
 export async function sendEmail(email: OutboundEmail): Promise<SendResult> {
-  if (!mailerConfigured()) {
+  const from = email.from ?? process.env.OUTREACH_FROM_EMAIL;
+  if (!process.env.RESEND_API_KEY || !from) {
     console.log(`[dry-run] would send to ${email.to}: "${email.subject}"`);
     return { ok: true, dryRun: true };
   }
 
+  const replyTo = email.replyTo ?? process.env.OUTREACH_REPLY_TO;
   const res = await fetch("https://api.resend.com/emails", {
     method: "POST",
     headers: {
@@ -37,11 +43,11 @@ export async function sendEmail(email: OutboundEmail): Promise<SendResult> {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      from: process.env.OUTREACH_FROM_EMAIL,
+      from,
       to: [email.to],
       subject: email.subject,
       text: email.text,
-      ...(process.env.OUTREACH_REPLY_TO ? { reply_to: process.env.OUTREACH_REPLY_TO } : {}),
+      ...(replyTo ? { reply_to: replyTo } : {}),
     }),
     signal: AbortSignal.timeout(20_000),
   });

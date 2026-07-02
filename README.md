@@ -109,12 +109,17 @@ src/app/api/capture-lead/     lead capture → captured_leads
 src/app/api/checkout/         Stripe Checkout session
 src/app/api/stripe/webhook/   auto-provisioning on subscription
 src/app/api/cron/cleanup/     demo expiry cleanup (Vercel cron)
+src/app/dashboard/[key]/      client dashboard: leads, conversations, KB editor, billing
+src/app/api/cron/digest/      morning digest email per client (Vercel cron)
+src/lib/notify.ts             transactional client email: instant lead alerts, digest, day-1
 public/embed.js               one-line install script for client sites
 ```
 
 ## Roadmap
 
-- **Week 2 (manual sales sprint):** send 20–30 personal emails with demo links; instrument demo opens / messages / checkout clicks.
-- **Week 3 (close the loop):** onboarding form after checkout, lead-notification emails (instant + morning digest), day-1 email.
-- **Week 4 (scale):** Outscraper pipeline → batch enrichment → batch demo generation; weekly client digest cron; outreach automation (CAN-SPAM compliant, separate sending domain).
+- ~~Week 1: demo generator, demo pages, widget, checkout~~ ✅
+- ~~Week 3 (close the loop): lead-notification emails (instant + morning digest), day-1 email, client dashboard~~ ✅
+- ~~Week 4 (scale): discovery pipeline → batch enrichment → batch demo generation → automated outreach~~ ✅ (growth engine)
+- **Now:** manual sales sprint — generate 10 real demos, QA them, start outreach in one city; instrument funnel metrics (demo opens → messages → checkout clicks).
+- **Next:** monthly value-report email, funnel metrics dashboard, AI voice follow-up channel for phone-only leads.
 - **v1.1:** Google review response drafting with one-click owner approval.

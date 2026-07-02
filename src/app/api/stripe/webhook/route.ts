@@ -2,6 +2,7 @@ import { NextRequest } from "next/server";
 import Stripe from "stripe";
 import { randomBytes } from "crypto";
 import { supabase, supabaseConfigured } from "@/lib/supabase";
+import { sendDayOneEmail } from "@/lib/notify";
 
 // Auto-provisioning: checkout.session.completed promotes the lead's demo
 // config to a production client config and mints an embed key. No sales
@@ -82,5 +83,20 @@ async function provisionClient(args: {
   if (demo.lead_id) {
     await db.from("leads").update({ status: "client" }).eq("id", demo.lead_id);
   }
-  // TODO(week 3): send day-1 email with embed snippet + install guide.
+  if (demo.lead_id) {
+    // Stop any in-flight outreach sequence — they converted.
+    await db.from("sequences").update({ status: "stopped" }).eq("lead_id", demo.lead_id);
+  }
+
+  // Day-1 email: embed snippet + install guide + dashboard link.
+  if (args.email) {
+    const businessName =
+      (demo.config as { business_name?: string } | null)?.business_name ?? "your business";
+    await sendDayOneEmail({
+      to: args.email,
+      businessName,
+      embedKey,
+      appUrl: process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000",
+    });
+  }
 }
