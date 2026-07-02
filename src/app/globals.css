@@ -487,6 +487,262 @@ a {
   padding: 6px 0 10px;
 }
 
+/* ---------- Client dashboard ---------- */
+
+.dash {
+  padding: 40px 24px 24px;
+}
+
+.dash-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 28px;
+}
+
+.dash-header h1 {
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.dash-header p {
+  color: var(--ink-soft);
+  font-size: 15px;
+}
+
+.dash-badge {
+  font-size: 13px;
+  font-weight: 700;
+  color: #15803d;
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  border-radius: 999px;
+  padding: 6px 14px;
+  white-space: nowrap;
+}
+
+.dash-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.dash-stat {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 20px;
+}
+
+.dash-stat-num {
+  font-size: 34px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.dash-stat-label {
+  color: var(--ink-soft);
+  font-size: 13px;
+}
+
+.dash-section {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 24px;
+  margin-bottom: 24px;
+}
+
+.dash-section h2 {
+  font-size: 19px;
+  margin-bottom: 14px;
+}
+
+.dash-section h3 {
+  font-size: 15px;
+  margin: 20px 0 6px;
+}
+
+.dash-empty {
+  color: var(--ink-soft);
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+
+.dash-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.dash-table th {
+  text-align: left;
+  color: var(--ink-soft);
+  font-weight: 600;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--line);
+}
+
+.dash-table td {
+  padding: 10px;
+  border-bottom: 1px solid var(--line);
+}
+
+.dash-convs {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.dash-conv {
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-size: 14px;
+}
+
+.dash-conv summary {
+  cursor: pointer;
+  display: flex;
+  gap: 14px;
+  align-items: baseline;
+}
+
+.dash-conv summary > span:first-child {
+  color: var(--ink-soft);
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.dash-conv-preview {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dash-conv-messages {
+  margin-top: 12px;
+  border-top: 1px solid var(--line);
+  padding-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.dash-conv-msg {
+  font-size: 13.5px;
+}
+
+.dash-conv-user strong {
+  color: var(--brand);
+}
+
+.dash-settings-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
+  align-items: flex-end;
+  margin-bottom: 8px;
+}
+
+.dash-settings-row label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink-soft);
+}
+
+.dash-settings-row input[type="email"] {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 9px 12px;
+  font-size: 14px;
+  min-width: 260px;
+}
+
+.dash-settings-row input[type="color"] {
+  width: 52px;
+  height: 38px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 2px;
+  background: var(--card);
+  cursor: pointer;
+}
+
+.dash-btn-secondary {
+  border: 1px solid var(--line);
+  background: var(--paper);
+  border-radius: 8px;
+  padding: 9px 16px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.dash-kb {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.dash-kb-item {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 2fr) auto;
+  gap: 8px;
+  align-items: start;
+}
+
+.dash-kb-item input,
+.dash-kb-item textarea {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 9px 12px;
+  font-size: 14px;
+  font-family: inherit;
+  width: 100%;
+}
+
+.dash-kb-remove {
+  border: none;
+  background: none;
+  color: var(--ink-soft);
+  cursor: pointer;
+  padding: 10px 6px;
+}
+
+.dash-save-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-top: 18px;
+}
+
+.dash-save {
+  width: auto;
+  padding: 12px 28px;
+}
+
+.dash-message {
+  font-size: 14px;
+  color: var(--ink-soft);
+}
+
+@media (max-width: 640px) {
+  .dash-kb-item {
+    grid-template-columns: 1fr;
+  }
+}
+
 /* Widget iframe page: the widget IS the page */
 .widget-page {
   height: 100dvh;
