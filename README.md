@@ -28,7 +28,7 @@ Open http://localhost:3000/demo/sunrise-dental-pasadena — a seeded sample demo
 
 1. **Supabase** — create a project, run `supabase/schema.sql` in the SQL editor, set `SUPABASE_URL` + `SUPABASE_SERVICE_ROLE_KEY`.
 2. **Stripe** — create a $150/month recurring price, set `STRIPE_SECRET_KEY`, `STRIPE_PRICE_ID`, and point a webhook at `/api/stripe/webhook` (events: `checkout.session.completed`, `customer.subscription.deleted`), set `STRIPE_WEBHOOK_SECRET`.
-3. **Deploy to Vercel** — `vercel.json` schedules the nightly demo-expiry cron (`CRON_SECRET` required).
+3. **Deploy to Vercel** — works on the free Hobby plan. Scheduled jobs (outreach drain, growth pipeline, digests, cleanup) run via GitHub Actions (`.github/workflows/scheduler.yml`), not Vercel Cron: in GitHub → Settings → Secrets and variables → Actions, set the **variable** `APP_URL` (your deployment URL) and the **secret** `CRON_SECRET` (same value as in Vercel env). Until set, the workflow no-ops.
 
 ## Generate a demo for a real business
 
